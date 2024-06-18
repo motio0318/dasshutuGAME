@@ -5,15 +5,19 @@ using UnityEngine.SceneManagement;//–Y‚ê‚È‚¢
 
 public class ChangeScene : MonoBehaviour
 {
-    public GameObject StartButton;
-    public GameObject EndButton;
     
+    public void Onclick()
+    {
 
+        Invoke("SceneChange", 0.5f);
+        Select();
+
+    }
     void Select()
     {
 
-        StartButton.SetActive(false);
-        EndButton.SetActive(false);
+        //ƒV[ƒ“–¼‚ğ‚±‚±‚É“ü—Í
+        SceneManager.LoadScene("Stage1");
 
     }
 
