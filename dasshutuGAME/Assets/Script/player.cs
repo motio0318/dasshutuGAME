@@ -5,13 +5,9 @@ using UnityEngine;
 public class player : MonoBehaviour
 {
 
-    private GameObject clickedGameObject;
+    [SerializeField] GameObject clickedGameObject;
+    [SerializeField] GameObject maruObject;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     // Update is called once per frame
     void Update()
@@ -30,10 +26,13 @@ public class player : MonoBehaviour
 
             if(hit2D)
             {
-
+                maruObject.SetActive(true);
+                if (maruObject == true)
+                    Debug.Log(maruObject);
                 //光線にあたったオブジェクトのGameObjectを取得する
                 clickedGameObject = hit2D.transform.gameObject;
             }
+
 
             Debug.Log(clickedGameObject);
         }

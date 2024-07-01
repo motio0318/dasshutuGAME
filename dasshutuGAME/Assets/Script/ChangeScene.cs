@@ -9,7 +9,7 @@ public class ChangeScene : MonoBehaviour
     public void Onclick()
     {
 
-        Invoke("SceneChange", 0.5f);
+        Invoke("SceneChange", 1.0f);
         Select();
 
     }
