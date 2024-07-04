@@ -26,7 +26,7 @@ public class player : MonoBehaviour
 
             if(hit2D)
             {
-                maruObject.SetActive(true);
+                maruObject.SetActive(false);
                 if (maruObject == true)
                     Debug.Log(maruObject);
                 //光線にあたったオブジェクトのGameObjectを取得する
