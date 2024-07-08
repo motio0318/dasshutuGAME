@@ -4,15 +4,13 @@ using UnityEngine;
 
 public class end : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    //ゲーム終了:ボタンから呼び出す
+    public void EndGame()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+#else
+    Application.Quit();//ゲームプレイ終了
+#endif
     }
 }

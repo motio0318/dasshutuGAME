@@ -5,21 +5,20 @@ using UnityEngine.SceneManagement;//–Y‚ê‚È‚¢
 
 public class ChangeScene : MonoBehaviour
 {
-    
+
+
+    private void Start()
+    {
+
+
+        FadeManager.FadeIn();
+
+    }
     public void Onclick()
     {
 
-        Invoke("SceneChange", 1.0f);
-        Select();
+
+        FadeManager.FadeOut(1);
 
     }
-    void Select()
-    {
-
-        //ƒV[ƒ“–¼‚ğ‚±‚±‚É“ü—Í
-        SceneManager.LoadScene("Stage1");
-
-    }
-
-
 }

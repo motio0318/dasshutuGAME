@@ -4,23 +4,19 @@ using UnityEngine;
 
 public class marubatu : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Rigidbody2D rbody2D;
+
+    private float jumpForce = 350f;
+
+    private int jumpCount = 0;
+
     void Start()
     {
-        
+        rbody2D = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
-        void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                if (Physics.Raycast(ray, out hit))
-                {
-                    transform.position = new Vector3(hit.point.x, 0.5f, hit.point.z);
-                }
-            }
-        }
+    public void OnClick()
+    {
+        this.rbody2D.AddForce(transform.up * jumpForce);
+    }
 }
