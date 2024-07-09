@@ -14,5 +14,6 @@ public class player : MonoBehaviour
    public void Onclick()
     {
         maruObject.gameObject.SetActive(true);
+        Debug.Log(maruObject);
     }
 }
