@@ -16,10 +16,10 @@ public class GameSceneDirector : MonoBehaviour
 
     int[] board =
     {
-        -1,-1,-1,-1,
-        -1,-1,-1,-1,
-        -1,-1,-1,-1,
-        -1,-1,-1,-1,
+        -1,-1,-1,
+        -1,-1,-1,
+        -1,-1,-1,
+        
     };
     // Start is called before the first frame update
     void Start()
@@ -93,7 +93,7 @@ public class GameSceneDirector : MonoBehaviour
                 for(int i = 0; i < v.Length; i++)
                 {
                     int idx0 = v[0];
-                    int idx1 = v[1];
+                    int idx1 = v[i];
 
                     //‚»‚ë‚Á‚Ä‚È‚¢ƒpƒ^[ƒ“1
                     if (0 > board[idx1] || board[idx0] != board[idx1]) issname = false;
@@ -115,6 +115,7 @@ public class GameSceneDirector : MonoBehaviour
             {
 
                 nowPlayer++;
+                if (2 <= nowPlayer) nowPlayer = 0;
             }
 
         }
