@@ -74,17 +74,23 @@ public class GameSceneDirector : MonoBehaviour
             // 8, 9,10,11
             // 4, 5, 6, 7
             // 0, 1, 2, 3
+
+
+            //6,7,8
+            //3,4,5
+            //0,1,2
+
             List<int[]> lines = new List<int[]>();
-            lines.Add(new int[] { 0,1,2,3});
-            lines.Add(new int[] { 4,5,6,7});
-            lines.Add(new int[] { 8,9,10,11});
-            lines.Add(new int[] { 12,13,14,15});
-            lines.Add(new int[] { 0,4,8,12});
-            lines.Add(new int[] { 1,5,9,13});
-            lines.Add(new int[] { 2,6,10,14});
-            lines.Add(new int[] { 3,7,11,15});
-            lines.Add(new int[] { 0,5,10,15});
-            lines.Add(new int[] { 3,6,9,12});
+            lines.Add(new int[] { 0,1,2});
+            lines.Add(new int[] { 3,4,5});
+            lines.Add(new int[] { 6,7,8});
+            lines.Add(new int[] { 0,3,6});
+            lines.Add(new int[] { 1,4,7});
+            lines.Add(new int[] { 2,5,8});
+            lines.Add(new int[] { 0,4,8});
+            lines.Add(new int[] { 2,4,6});
+            //lines.Add(new int[] { 0,5,10,15});
+            //lines.Add(new int[] { 3,6,9,12});
 
             foreach(var v in lines)//v‚Ílines‚Ì’†g
             {
@@ -125,5 +131,11 @@ public class GameSceneDirector : MonoBehaviour
     {
 
         SceneManager.LoadScene("Stage1");
+    }
+
+    public void TitleScene()
+    {
+        SceneManager.LoadScene("Title");
+
     }
 }
