@@ -61,6 +61,11 @@ public class GameSceneDirector : MonoBehaviour
                     board[idx] = nowPlayer;
                     next = true;
 
+
+
+                    //4つ目のオブジェクトが置かれたときに、一つ目のオブジェクトを削除（座標保存）
+
+
                 }
             }
         }
