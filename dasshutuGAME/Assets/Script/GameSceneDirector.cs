@@ -1,146 +1,116 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
 public class GameSceneDirector : MonoBehaviour
 {
-
     public GameObject PrefabCircle;
     public GameObject PrefabCross;
     public GameObject Reslut;
     public GameObject TextResult;
-
-    int nowPlayer;
-
-    int[] board =
-    {
-        -1,-1,-1,
-        -1,-1,-1,
-        -1,-1,-1,
-        
-    };
-    // Start is called before the first frame update
+    private int nowPlayer = 0;  // 現在のプレイヤー
+    private int[] board = new int[9];  // ボードの状態を表す配列
+                                       // ○と×のオブジェクトを別々に格納するリスト
+    private List<GameObject> placedCircles = new List<GameObject>();
+    private List<GameObject> placedCrosses = new List<GameObject>();
     void Start()
     {
-        
+        // ボードの初期化
+        for (int i = 0; i < board.Length; i++)
+        {
+            board[i] = -1;
+        }
     }
-
-    // Update is called once per frame
     void Update()
     {
-
-        //次に行くかどうか
-        bool next = false;
-
-        //置く場所
-        if(Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-            if(null != hit.collider)
+            HandleInput();
+        }
+    }
+    private void HandleInput()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+        if (hit.collider != null)
+        {
+            Vector3 pos = hit.collider.gameObject.transform.position;
+            // 座標から配列番号に変換
+            int idx = (int)(pos.x + 1) + (int)(pos.y + 1) * 3;
+            if (board[idx] == -1)
             {
-
-                Vector3 pos = hit.collider.gameObject.transform.position;
-
-                //取得した座標から配列番号に戻す
-                int x = (int)pos.x + 1;
-                int y = (int)pos.y + 1;
-
-                int idx = x + y * 3;
-
-                //何も置かれていなければ
-                if(-1 == board[idx])
-                {
-                    GameObject prefab = PrefabCircle;
-                    if (1 == nowPlayer) prefab = PrefabCross;
-
-                    Instantiate(prefab, pos, Quaternion.identity);
-
-                    board[idx] = nowPlayer;
-                    next = true;
-
-
-
-                    //4つ目のオブジェクトが置かれたときに、一つ目のオブジェクトを削除（座標保存）
-
-
-                }
+                PlaceObject(pos, idx);
             }
         }
-
-        //勝敗チェック
-        if (next)
+    }
+    private void PlaceObject(Vector3 pos, int idx)
+    {
+        GameObject prefab;
+        List<GameObject> placedObjects;
+        if (nowPlayer == 0)
         {
-            bool win = false;
-
-            //12,13,14,15
-            // 8, 9,10,11
-            // 4, 5, 6, 7
-            // 0, 1, 2, 3
-
-
-            //6,7,8
-            //3,4,5
-            //0,1,2
-
-            List<int[]> lines = new List<int[]>();
-            lines.Add(new int[] { 0,1,2});
-            lines.Add(new int[] { 3,4,5});
-            lines.Add(new int[] { 6,7,8});
-            lines.Add(new int[] { 0,3,6});
-            lines.Add(new int[] { 1,4,7});
-            lines.Add(new int[] { 2,5,8});
-            lines.Add(new int[] { 0,4,8});
-            lines.Add(new int[] { 2,4,6});
-            //lines.Add(new int[] { 0,5,10,15});
-            //lines.Add(new int[] { 3,6,9,12});
-
-            foreach(var v in lines)//vはlinesの中身
-            {
-                bool issname = true;
-
-                for(int i = 0; i < v.Length; i++)
-                {
-                    int idx0 = v[0];
-                    int idx1 = v[i];
-
-                    //そろってないパターン1
-                    if (0 > board[idx1] || board[idx0] != board[idx1]) issname = false;
-
-                }
-                if(issname)
-                {
-                    win = true;
-                }
-            }
-
-            //勝敗チェック
-            if(win)
-            {
-                Reslut.SetActive(true);
-                TextResult.GetComponent<Text>().text = (nowPlayer + 1) + "Pの勝ち！";
-            }
-            else
-            {
-
-                nowPlayer++;
-                if (2 <= nowPlayer) nowPlayer = 0;
-            }
-
+            prefab = PrefabCircle;
+            placedObjects = placedCircles;
+        }
+        else
+        {
+            prefab = PrefabCross;
+            placedObjects = placedCrosses;
         }
 
+        GameObject newObject = Instantiate(prefab, pos, Quaternion.identity);
+        placedObjects.Add(newObject);
+        // 配置されたオブジェクトが4つを超えた場合、最初のオブジェクトを削除
+        if (placedObjects.Count > 3)
+        {
+            GameObject objectToRemove = placedObjects[0];
+            placedObjects.RemoveAt(0);
+            Destroy(objectToRemove);
+            // 配列も更新する
+            int removeX = (int)objectToRemove.transform.position.x + 1;
+            int removeY = (int)objectToRemove.transform.position.y + 1;
+            int removeIdx = removeX + removeY * 3;
+            board[removeIdx] = -1;
+        }
+        board[idx] = nowPlayer;
+        if (CheckWin())
+        {
+            Reslut.SetActive(true);
+            TextResult.GetComponent<Text>().text = (nowPlayer + 1) + "Pの勝ち！";
+        }
+        else
+        {
+            nowPlayer = (nowPlayer + 1) % 2;
+        }
+    }
+    private bool CheckWin()
+    {
+        List<int[]> lines = new List<int[]>
+       {
+           new int[] { 0, 1, 2 },
+           new int[] { 3, 4, 5 },
+           new int[] { 6, 7, 8 },
+           new int[] { 0, 3, 6 },
+           new int[] { 1, 4, 7 },
+           new int[] { 2, 5, 8 },
+           new int[] { 0, 4, 8 },
+           new int[] { 2, 4, 6 }
+       };
+        foreach (var line in lines)
+        {
+            if (board[line[0]] != -1 && board[line[0]] == board[line[1]] && board[line[1]] == board[line[2]])
+            {
+                return true;
+            }
+        }
+        return false;
     }
     public void Retry()
     {
-
         SceneManager.LoadScene("Stage1");
     }
-
     public void TitleScene()
     {
         SceneManager.LoadScene("Title");
-
     }
 }
