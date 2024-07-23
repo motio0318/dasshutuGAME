@@ -8,6 +8,10 @@ public class GameSceneDirector : MonoBehaviour
     public GameObject PrefabCross;
     public GameObject Reslut;
     public GameObject TextResult;
+    public GameObject SE;
+
+
+
     private int nowPlayer = 0;  // 現在のプレイヤー
     private int[] board = new int[9];  // ボードの状態を表す配列
                                        // ○と×のオブジェクトを別々に格納するリスト
@@ -75,8 +79,11 @@ public class GameSceneDirector : MonoBehaviour
         board[idx] = nowPlayer;
         if (CheckWin())
         {
+
+            SE.SetActive(false);
             Reslut.SetActive(true);
             TextResult.GetComponent<Text>().text = (nowPlayer + 1) + "Pの勝ち！";
+
         }
         else
         {
