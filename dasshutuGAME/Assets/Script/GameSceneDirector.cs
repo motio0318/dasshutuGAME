@@ -9,8 +9,6 @@ public class GameSceneDirector : MonoBehaviour
     public GameObject Reslut;
     public GameObject TextResult;
     public GameObject SE;
-    [SerializeField] Text textUI;
-    [SerializeField] Text textUI2;
 
 
 
@@ -53,22 +51,16 @@ public class GameSceneDirector : MonoBehaviour
     private void PlaceObject(Vector3 pos, int idx)
     {
 
-        textUI.enabled = false;
-        textUI2.enabled = false;
 
         GameObject prefab;
         List<GameObject> placedObjects;
         if (nowPlayer == 0)
         {
-            textUI.enabled  = true;
-            textUI2.enabled = false;
             prefab = PrefabCircle;
             placedObjects = placedCircles;
         }
         else
         {
-            textUI.enabled = false;
-            textUI2.enabled = true;
             prefab = PrefabCross;
             placedObjects = placedCrosses;
         }
@@ -90,8 +82,6 @@ public class GameSceneDirector : MonoBehaviour
         board[idx] = nowPlayer;
         if (CheckWin())
         {
-            textUI.enabled = false;
-            textUI2.enabled = false;
             SE.SetActive(false);
             Reslut.SetActive(true);
             TextResult.GetComponent<Text>().text = (nowPlayer + 1) + "PÇÃèüÇøÅI";
