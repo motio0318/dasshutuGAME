@@ -82,6 +82,7 @@ public class GameSceneDirector : MonoBehaviour
         board[idx] = nowPlayer;
         if (CheckWin())
         {
+
             SE.SetActive(false);
             Reslut.SetActive(true);
             TextResult.GetComponent<Text>().text = (nowPlayer + 1) + "P‚ÌŸ‚¿I";
