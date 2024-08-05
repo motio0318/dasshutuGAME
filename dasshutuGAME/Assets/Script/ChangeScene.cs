@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;//–Y‚ê‚È‚¢
 public class ChangeScene : MonoBehaviour
 {
 
+    [SerializeField,Header("SE")]
+    private GameObject SEObj;
 
     private void Start()
     {
@@ -17,7 +19,7 @@ public class ChangeScene : MonoBehaviour
     public void Onclick()
     {
 
-
+        Instantiate(SEObj);
         FadeManager.FadeOut(1);
 
     }
