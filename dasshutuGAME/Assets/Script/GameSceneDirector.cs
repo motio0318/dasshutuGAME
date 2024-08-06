@@ -9,15 +9,12 @@ public class GameSceneDirector : MonoBehaviour
     public GameObject Reslut;
     public GameObject TextResult;
     public GameObject SE;
-
-
-
-
+    public Text PlayerTurnText;
     private int nowPlayer = 0;  // 現在のプレイヤー
     private int[] board = new int[9];  // ボードの状態を表す配列
-                                       // ○と×のオブジェクトを別々に格納するリスト
-    private List<GameObject> placedCircles = new List<GameObject>();
-    private List<GameObject> placedCrosses = new List<GameObject>();
+    private List<GameObject> placedCircles = new List<GameObject>(); // ○のオブジェクトを格納するリスト
+    private List<GameObject> placedCrosses = new List<GameObject>(); // ×のオブジェクトを格納するリスト
+    private bool gameWon = false; // 勝利状態を表すフラグ
     void Start()
     {
         // ボードの初期化
@@ -25,6 +22,7 @@ public class GameSceneDirector : MonoBehaviour
         {
             board[i] = -1;
         }
+        UpdatePlayerTurnText(); // ゲーム開始時にプレイヤーターンを表示
     }
     void Update()
     {
@@ -35,6 +33,7 @@ public class GameSceneDirector : MonoBehaviour
     }
     private void HandleInput()
     {
+        if (gameWon) return; // 勝利時に入力を無視する
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
         if (hit.collider != null)
@@ -50,8 +49,6 @@ public class GameSceneDirector : MonoBehaviour
     }
     private void PlaceObject(Vector3 pos, int idx)
     {
-
-
         GameObject prefab;
         List<GameObject> placedObjects;
         if (nowPlayer == 0)
@@ -64,7 +61,6 @@ public class GameSceneDirector : MonoBehaviour
             prefab = PrefabCross;
             placedObjects = placedCrosses;
         }
-
         GameObject newObject = Instantiate(prefab, pos, Quaternion.identity);
         placedObjects.Add(newObject);
         // 配置されたオブジェクトが4つを超えた場合、最初のオブジェクトを削除
@@ -82,15 +78,27 @@ public class GameSceneDirector : MonoBehaviour
         board[idx] = nowPlayer;
         if (CheckWin())
         {
-
             SE.SetActive(false);
             Reslut.SetActive(true);
             TextResult.GetComponent<Text>().text = (nowPlayer + 1) + "Pの勝ち！";
-
+            PlayerTurnText.gameObject.SetActive(false); // 勝利時にプレイヤーターンのテキストを非表示にする
+            gameWon = true; // 勝利フラグを設定
         }
         else
         {
             nowPlayer = (nowPlayer + 1) % 2;
+            UpdatePlayerTurnText(); // ターンが切り替わるたびにテキストを更新
+        }
+    }
+    private void UpdatePlayerTurnText()
+    {
+        if (nowPlayer == 0)
+        {
+            PlayerTurnText.text = "○のターンです";
+        }
+        else
+        {
+            PlayerTurnText.text = "×のターンです";
         }
     }
     private bool CheckWin()
@@ -117,10 +125,12 @@ public class GameSceneDirector : MonoBehaviour
     }
     public void Retry()
     {
+        gameWon = false; // 勝利フラグをリセット
         SceneManager.LoadScene("Stage1");
     }
     public void TitleScene()
     {
+        gameWon = false; // 勝利フラグをリセット
         SceneManager.LoadScene("Title");
     }
 }
